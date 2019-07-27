@@ -25,22 +25,22 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
         const json play = plays[playID];
 
         auto amountFor = [](const nlohmann::json& perf, const nlohmann::json& play) {
-            int thisAmount = 0;
+            int result = 0;
             if (play["type"] == "tragedy") {
-                thisAmount = 40000;
+                result = 40000;
                 if (perf["audience"].get<int>() > 30) {
-                    thisAmount += 1000 * (perf["audience"].get<int>() - 30);
+                    result += 1000 * (perf["audience"].get<int>() - 30);
                 }
             } else if (play["type"] == "comedy") {
-                thisAmount = 30000;
+                result = 30000;
                 if (perf["audience"].get<int>() > 20) {
-                    thisAmount += 1000 + 500 * (perf["audience"].get<int>() - 20);
+                    result += 1000 + 500 * (perf["audience"].get<int>() - 20);
                 }
-                thisAmount += 300 * perf["audience"].get<int>();
+                result += 300 * perf["audience"].get<int>();
             } else {
                 throw logic_error("unknown type: " + play["type"].get<string>());
             }
-            return thisAmount;
+            return result;
         };
 
         int thisAmount = amountFor(perf, play);
