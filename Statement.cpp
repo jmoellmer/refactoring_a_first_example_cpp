@@ -52,11 +52,11 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
 
     // function totalVolumeCredits()
     auto totalVolumeCredits = [invoice, volumeCreditsFor]() {
-        int volumeCredits = 0;
+        int result = 0;
         for (auto &perf : invoice["performances"]) {
-            volumeCredits += volumeCreditsFor(perf);
+            result += volumeCreditsFor(perf);
         }
-        return volumeCredits;
+        return result;
     };
 
     for (auto &perf : invoice["performances"]) {
