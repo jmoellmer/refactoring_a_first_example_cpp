@@ -19,11 +19,16 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
     ostringstream resultStream;
     resultStream.imbue(locale("en_US.UTF-8"));
 
+    // function playFor()
+    auto playFor = [plays](const nlohmann::json& aPerformance) {
+        const string playID = aPerformance["playID"];
+        return plays[playID];
+    };
+
     json performances = invoice["performances"];
     for (auto &perf : performances) {
-        const string playID = perf["playID"];
-        const json play = plays[playID];
 
+        // function amountFor()
         auto amountFor = [](const nlohmann::json& aPerformance, const nlohmann::json& play) {
             int result = 0;
             if (play["type"] == "tragedy") {
@@ -43,6 +48,7 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
             return result;
         };
 
+        const json play = playFor(perf);
         int thisAmount = amountFor(perf, play);
 
         // add volume credits
