@@ -48,8 +48,6 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
             return result;
         };
 
-        int thisAmount = amountFor(perf);
-
         // add volume credits
         volumeCredits += max(perf["audience"].get<int>() - 30, 0);
         // add extra credit for every ten comedy attendees
@@ -58,13 +56,13 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
         }
 
         // print line for this order
-        resultStream << "\t" << playFor(perf)["type"].get<string>() << ": " << std::showbase << put_money(thisAmount / 100)
+        resultStream << "\t" << playFor(perf)["type"].get<string>() << ": " << std::showbase << put_money(amountFor(perf) / 100)
                      << " (" << to_string(perf["audience"].get<int>()) << " seats)\n";
 
         result += resultStream.str();
         resultStream.str("");
         resultStream.clear();
-        totalAmount += thisAmount;
+        totalAmount += amountFor(perf);
     }
 
     resultStream << "Amount owed is " << std::showbase << put_money(totalAmount / 100) << "\n";
