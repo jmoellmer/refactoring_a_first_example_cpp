@@ -55,12 +55,13 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
     json performances = invoice["performances"];
     for (auto &perf : performances) {
 
-        volumeCredits += volumeCreditsFor(perf);
-
         // print line for this order
         result += "\t" + playFor(perf)["type"].get<string>() + ": " + usd(amountFor(perf))
                   + " (" + to_string(perf["audience"].get<int>()) + " seats)\n";
         totalAmount += amountFor(perf);
+    }
+    for (auto &perf : performances) {
+        volumeCredits += volumeCreditsFor(perf);
     }
 
     result += "Amount owed is " + usd(totalAmount) + "\n";
