@@ -29,26 +29,26 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
     for (auto &perf : performances) {
 
         // function amountFor()
-        auto amountFor = [](const nlohmann::json& aPerformance, const nlohmann::json& play) {
+        auto amountFor = [playFor](const nlohmann::json& aPerformance) {
             int result = 0;
-            if (play["type"] == "tragedy") {
+            if (playFor(aPerformance)["type"] == "tragedy") {
                 result = 40000;
                 if (aPerformance["audience"].get<int>() > 30) {
                     result += 1000 * (aPerformance["audience"].get<int>() - 30);
                 }
-            } else if (play["type"] == "comedy") {
+            } else if (playFor(aPerformance)["type"] == "comedy") {
                 result = 30000;
                 if (aPerformance["audience"].get<int>() > 20) {
                     result += 1000 + 500 * (aPerformance["audience"].get<int>() - 20);
                 }
                 result += 300 * aPerformance["audience"].get<int>();
             } else {
-                throw logic_error("unknown type: " + play["type"].get<string>());
+                throw logic_error("unknown type: " + playFor(aPerformance)["type"].get<string>());
             }
             return result;
         };
 
-        int thisAmount = amountFor(perf, playFor(perf));
+        int thisAmount = amountFor(perf);
 
         // add volume credits
         volumeCredits += max(perf["audience"].get<int>() - 30, 0);
