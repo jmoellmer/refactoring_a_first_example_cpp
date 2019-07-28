@@ -68,10 +68,8 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
         totalAmount += amountFor(perf);
     }
 
-    int volumeCredits = totalVolumeCredits();
-
     result += "Amount owed is " + usd(totalAmount) + "\n";
-    result += "You earned " + to_string(volumeCredits) + " credits\n";
+    result += "You earned " + to_string(totalVolumeCredits()) + " credits\n";
     return result;
 }
 
