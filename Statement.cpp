@@ -64,6 +64,8 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
         // print line for this order
         result += "\t" + playFor(perf)["type"].get<string>() + ": " + usd(amountFor(perf))
                   + " (" + to_string(perf["audience"].get<int>()) + " seats)\n";
+    }
+    for (auto &perf : invoice["performances"]) {
         totalAmount += amountFor(perf);
     }
 
