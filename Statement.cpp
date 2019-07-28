@@ -51,6 +51,16 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
         return result;
     };
 
+    // function totalVolumeCredits()
+    auto totalVolumeCredits = [invoice, volumeCreditsFor]() {
+        json performances = invoice["performances"];
+        int volumeCredits = 0;
+        for (auto &perf : performances) {
+            volumeCredits += volumeCreditsFor(perf);
+        }
+        return volumeCredits;
+    };
+
     json performances = invoice["performances"];
     for (auto &perf : performances) {
 
@@ -60,10 +70,7 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
         totalAmount += amountFor(perf);
     }
 
-    int volumeCredits = 0;
-    for (auto &perf : performances) {
-        volumeCredits += volumeCreditsFor(perf);
-    }
+    int volumeCredits = totalVolumeCredits();
 
     result += "Amount owed is " + usd(totalAmount) + "\n";
     result += "You earned " + to_string(volumeCredits) + " credits\n";
