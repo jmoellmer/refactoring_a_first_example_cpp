@@ -49,11 +49,11 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
         };
 
         // function volumeCredits
-        auto volumeCreditsFor = [playFor](const nlohmann::json& perf) {
+        auto volumeCreditsFor = [playFor](const nlohmann::json& aPerformance) {
             int result = 0;
-            result += max(perf["audience"].get<int>() - 30, 0);
-            if ("comedy" == playFor(perf)["type"]) {
-                result += floor(perf["audience"].get<int>() / 5);
+            result += max(aPerformance["audience"].get<int>() - 30, 0);
+            if ("comedy" == playFor(aPerformance)["type"]) {
+                result += floor(aPerformance["audience"].get<int>() / 5);
             }
             return result;
         };
