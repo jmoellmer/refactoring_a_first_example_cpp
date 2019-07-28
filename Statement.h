@@ -10,7 +10,7 @@ public:
     Statement() = default;
     static std::string printStatement(const nlohmann::json &invoice, const nlohmann::json &plays);
 private:
-    static std::string format(float number);
+    static std::string format(float aNumber);
 };
 
 

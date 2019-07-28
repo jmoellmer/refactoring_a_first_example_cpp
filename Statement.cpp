@@ -69,9 +69,9 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
     return result;
 }
 
-std::string Statement::format(float number) {
+std::string Statement::format(float aNumber) {
     ostringstream ss;
     ss.imbue(locale("en_US.UTF-8"));
-    ss << std::showbase << put_money(number);
+    ss << std::showbase << put_money(aNumber);
     return ss.str();
 }
