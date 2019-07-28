@@ -13,7 +13,6 @@ using namespace nlohmann;
 
 std::string Statement::printStatement(const nlohmann::json &invoice, const nlohmann::json &plays) {
     int totalAmount = 0;
-    int volumeCredits = 0;
     string customer;
     string result = "Statement for " + invoice["customer"].get<string>() + "\n";
 
@@ -60,6 +59,8 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
                   + " (" + to_string(perf["audience"].get<int>()) + " seats)\n";
         totalAmount += amountFor(perf);
     }
+
+    int volumeCredits = 0;
     for (auto &perf : performances) {
         volumeCredits += volumeCreditsFor(perf);
     }
