@@ -19,8 +19,7 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
 
     // function playFor()
     auto playFor = [plays](const nlohmann::json& aPerformance) {
-        const string playID = aPerformance["playID"];
-        return plays[playID];
+        return plays[aPerformance["playID"].get<string>()];
     };
 
     json performances = invoice["performances"];
