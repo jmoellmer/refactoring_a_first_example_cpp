@@ -57,7 +57,7 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
         return result;
     };
 
-    auto appleSauce = [invoice, amountFor]() {
+    auto totalAmount = [invoice, amountFor]() {
         int result = 0;
         for (auto &perf : invoice["performances"]) {
             result += amountFor(perf);
@@ -72,9 +72,7 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
                   + " (" + to_string(perf["audience"].get<int>()) + " seats)\n";
     }
 
-    int totalAmount = appleSauce();
-
-    result += "Amount owed is " + usd(totalAmount) + "\n";
+    result += "Amount owed is " + usd(totalAmount()) + "\n";
     result += "You earned " + to_string(totalVolumeCredits()) + " credits\n";
     return result;
 }
