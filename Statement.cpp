@@ -16,8 +16,6 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
     int volumeCredits = 0;
     string customer;
     string result = "Statement for " + invoice["customer"].get<string>() + "\n";
-    ostringstream resultStream;
-    resultStream.imbue(locale("en_US.UTF-8"));
 
     // function playFor()
     auto playFor = [plays](const nlohmann::json& aPerformance) {
@@ -48,7 +46,7 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
             return result;
         };
 
-        // function volumeCredits
+        // function volumeCredits()
         auto volumeCreditsFor = [playFor](const nlohmann::json& aPerformance) {
             int result = 0;
             result += max(aPerformance["audience"].get<int>() - 30, 0);
@@ -61,17 +59,19 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
         volumeCredits += volumeCreditsFor(perf);
 
         // print line for this order
-        resultStream << "\t" << playFor(perf)["type"].get<string>() << ": " << std::showbase << put_money(amountFor(perf) / 100)
-                     << " (" << to_string(perf["audience"].get<int>()) << " seats)\n";
-
-        result += resultStream.str();
-        resultStream.str("");
-        resultStream.clear();
+        result += "\t" + playFor(perf)["type"].get<string>() + ": " + format(amountFor(perf) / 100)
+                  + " (" + to_string(perf["audience"].get<int>()) + " seats)\n";
         totalAmount += amountFor(perf);
     }
 
-    resultStream << "Amount owed is " << std::showbase << put_money(totalAmount / 100) << "\n";
-    result += resultStream.str();
+    result += "Amount owed is " + format(totalAmount / 100) + "\n";
     result += "You earned " + to_string(volumeCredits) + " credits\n";
     return result;
+}
+
+std::string Statement::format(float number) {
+    ostringstream ss;
+    ss.imbue(locale("en_US.UTF-8"));
+    ss << std::showbase << put_money(number);
+    return ss.str();
 }
