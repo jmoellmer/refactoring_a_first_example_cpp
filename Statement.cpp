@@ -48,18 +48,17 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
             return result;
         };
 
-        const json play = playFor(perf);
-        int thisAmount = amountFor(perf, play);
+        int thisAmount = amountFor(perf, playFor(perf));
 
         // add volume credits
         volumeCredits += max(perf["audience"].get<int>() - 30, 0);
         // add extra credit for every ten comedy attendees
-        if ("comedy" == play["type"]) {
+        if ("comedy" == playFor(perf)["type"]) {
             volumeCredits += floor(perf["audience"].get<int>() / 5);
         }
 
         // print line for this order
-        resultStream << "\t" << play["name"].get<string>() << ": " << std::showbase << put_money(thisAmount / 100)
+        resultStream << "\t" << playFor(perf)["type"].get<string>() << ": " << std::showbase << put_money(thisAmount / 100)
                      << " (" << to_string(perf["audience"].get<int>()) << " seats)\n";
 
         result += resultStream.str();
