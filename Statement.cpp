@@ -59,12 +59,12 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
         volumeCredits += volumeCreditsFor(perf);
 
         // print line for this order
-        result += "\t" + playFor(perf)["type"].get<string>() + ": " + usd(amountFor(perf) / 100)
+        result += "\t" + playFor(perf)["type"].get<string>() + ": " + usd(amountFor(perf))
                   + " (" + to_string(perf["audience"].get<int>()) + " seats)\n";
         totalAmount += amountFor(perf);
     }
 
-    result += "Amount owed is " + usd(totalAmount / 100) + "\n";
+    result += "Amount owed is " + usd(totalAmount) + "\n";
     result += "You earned " + to_string(volumeCredits) + " credits\n";
     return result;
 }
@@ -72,6 +72,6 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
 std::string Statement::usd(float aNumber) {
     ostringstream ss;
     ss.imbue(locale("en_US.UTF-8"));
-    ss << std::showbase << put_money(aNumber);
+    ss << std::showbase << put_money(aNumber / 100);
     return ss.str();
 }
