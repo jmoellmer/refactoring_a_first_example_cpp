@@ -50,12 +50,12 @@ std::string Statement::printStatement(const nlohmann::json &invoice, const nlohm
 
         // function volumeCredits
         auto volumeCreditsFor = [playFor](const nlohmann::json& perf) {
-            int volumeCredits = 0;
-            volumeCredits += max(perf["audience"].get<int>() - 30, 0);
+            int result = 0;
+            result += max(perf["audience"].get<int>() - 30, 0);
             if ("comedy" == playFor(perf)["type"]) {
-                volumeCredits += floor(perf["audience"].get<int>() / 5);
+                result += floor(perf["audience"].get<int>() / 5);
             }
-            return volumeCredits;
+            return result;
         };
 
         volumeCredits += volumeCreditsFor(perf);
